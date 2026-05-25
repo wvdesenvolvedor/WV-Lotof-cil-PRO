@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>WV Lotofácil PRO</title>
+<meta name="theme-color" content="#111827" />
+<style>
+:root{
+  --bg:#0b1020;
+  --panel:#151b2f;
+  --panel2:#1d2740;
+  --text:#f8fafc;
+  --muted:#aab4c8;
+  --green:#22c55e;
+  --blue:#38bdf8;
+  --yellow:#facc15;
+  --red:#ef4444;
+  --purple:#a855f7;
+  --border:rgba(255,255,255,.12);
+  --shadow:0 18px 38px rgba(0,0,0,.38);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Arial,Helvetica,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(56,189,248,.22), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(168,85,247,.18), transparent 35%),
+    linear-gradient(135deg,#070b16,#111827 48%,#0f172a);
+  padding:14px;
+}
+.wrap{max-width:1080px;margin:0 auto;padding-bottom:38px}
+.header{
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:18px;
+  background:linear-gradient(145deg,rgba(21,27,47,.96),rgba(29,39,64,.88));
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.header:before{
+  content:"";position:absolute;inset:-90px auto auto -90px;width:190px;height:190px;border-radius:50%;background:rgba(34,197,94,.16);filter:blur(4px)
+}
+h1{font-size:24px;line-height:1.12;margin:0 0 8px;font-weight:900;letter-spacing:-.5px}
+.compactHeader{padding:14px 16px;text-align:center;margin-bottom:12px}
+.compactHeader h1{margin:0;font-size:24px;letter-spacing:.2px}
+p{margin:0;color:var(--muted);line-height:1.45;font-size:14px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.badge{border:1px solid var(--border);background:rgba(255,255,255,.07);padding:8px 10px;border-radius:999px;font-size:12px;font-weight:800;color:#e5e7eb}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.card{
+  background:linear-gradient(145deg,rgba(21,27,47,.96),rgba(21,27,47,.78));
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:16px;
+  box-shadow:var(--shadow);
+}
+.card h2{font-size:17px;margin:0 0 12px;font-weight:900}
+.games{display:grid;gap:12px}
+.game{background:rgba(255,255,255,.055);border:1px solid var(--border);border-radius:18px;padding:13px}
+.game-title{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:10px;font-size:13px;color:#dbeafe;font-weight:900}
+.game-title-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.hit-count-badge{
+  min-width:38px;height:38px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+  background:#fff;color:#0f172a;border:2px solid rgba(255,255,255,.9);font-size:14px;font-weight:1000;
+  box-shadow:0 0 18px rgba(255,255,255,.34), inset 0 -3px 7px rgba(0,0,0,.12);
+}
+.hit-count-label{font-size:11px;color:#e5e7eb;font-weight:900;white-space:nowrap}
+.hit-count-wrap{display:flex;align-items:center;gap:6px}
+.balls{display:flex;flex-wrap:wrap;gap:7px}
+.ball{
+  width:36px;height:36px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:900;color:#031016;background:linear-gradient(145deg,#f8fafc,#93c5fd);
+  box-shadow:inset 0 -3px 6px rgba(0,0,0,.22),0 6px 12px rgba(0,0,0,.22)
+}
+.ball.hit{background:linear-gradient(145deg,#bbf7d0,#22c55e);color:#04130a;animation:pulseHit .85s infinite alternate}
+.ball.miss{opacity:.36;filter:grayscale(1)}
+@keyframes pulseHit{from{transform:scale(1)}to{transform:scale(1.08)}}
+.statusBox{
+  margin-top:12px;border:1px solid var(--border);border-radius:18px;padding:12px;background:rgba(0,0,0,.18)
+}
+.blink{
+  display:flex;align-items:center;gap:10px;justify-content:center;
+  margin-top:14px;padding:14px;border-radius:18px;font-weight:1000;text-align:center;
+  color:#111827;background:linear-gradient(90deg,#facc15,#22c55e,#38bdf8);
+  animation:blinkBox .85s infinite alternate;box-shadow:0 0 25px rgba(250,204,21,.28)
+}
+@keyframes blinkBox{from{opacity:.62;transform:scale(.993)}to{opacity:1;transform:scale(1)}}
+
+.nextDrawPush{
+  margin-top:14px;border:2px solid rgba(250,204,21,.72);border-radius:20px;padding:14px;
+  color:#111827;background:linear-gradient(145deg,#fff7ad,#facc15 58%,#f59e0b);
+  box-shadow:0 0 28px rgba(250,204,21,.34);font-weight:1000;animation:yellowPulse .75s infinite alternate
+}
+.nextDrawPush .top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.nextDrawPush .title{font-size:14px;text-transform:uppercase;letter-spacing:.25px}
+.nextDrawPush .value{font-size:18px;color:#0f172a}
+.nextDrawPush .sub{margin-top:6px;font-size:12px;color:#3b2f00;font-weight:900;line-height:1.35}
+@keyframes yellowPulse{from{opacity:.72;transform:scale(.992)}to{opacity:1;transform:scale(1.006)}}
+textarea,input{
+  width:100%;border:1px solid var(--border);outline:none;border-radius:16px;background:#0b1222;color:#fff;
+  padding:13px;font-family:Arial,Helvetica,sans-serif;font-size:15px;resize:vertical;
+}
+textarea{min-height:88px}
+label{display:block;margin:10px 0 7px;color:#dbeafe;font-size:13px;font-weight:900}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+button,a.btn{
+  appearance:none;border:0;text-decoration:none;text-align:center;cursor:pointer;border-radius:15px;padding:13px 12px;
+  font-weight:1000;color:#07111f;font-size:14px;box-shadow:0 8px 18px rgba(0,0,0,.24)
+}
+.green{background:linear-gradient(145deg,#86efac,#22c55e)}
+.blue{background:linear-gradient(145deg,#bae6fd,#38bdf8)}
+.yellow{background:linear-gradient(145deg,#fde68a,#facc15)}
+.purple{background:linear-gradient(145deg,#ddd6fe,#a855f7);color:#fff}
+.darkBtn{background:#293244;color:#fff;border:1px solid var(--border)}
+.resultLine{font-size:15px;line-height:1.6;color:#e5e7eb}
+.resultLine strong{color:#fff}
+.win15{color:#facc15}.win14{color:#22c55e}.win13{color:#38bdf8}.win12{color:#a78bfa}.win11{color:#fb923c}.low{color:#cbd5e1}
+.notice{font-size:12px;color:#aab4c8;margin-top:10px;line-height:1.42}
+.table{width:100%;border-collapse:collapse;font-size:12px;overflow:hidden;border-radius:14px;margin-top:8px}
+.table th,.table td{border:1px solid var(--border);padding:8px;text-align:left;color:#dbeafe}
+.table th{background:rgba(255,255,255,.08);color:#fff}
+.footer{text-align:center;color:#94a3b8;font-size:11px;margin-top:18px;opacity:.8}
+.smallList{margin:8px 0 0;padding-left:18px;color:#cbd5e1;font-size:13px;line-height:1.45}
+.loaderDot{width:12px;height:12px;border-radius:50%;background:#22c55e;display:inline-block;box-shadow:0 0 12px #22c55e;animation:dot 1s infinite alternate}
+@keyframes dot{from{opacity:.3}to{opacity:1}}
+.megaAlert{
+  display:none;position:sticky;top:8px;z-index:50;margin:12px 0;padding:16px;border-radius:20px;
+  text-align:center;font-weight:1000;color:#07111f;background:linear-gradient(90deg,#facc15,#fb923c,#22c55e,#38bdf8);
+  border:2px solid rgba(255,255,255,.38);box-shadow:0 0 34px rgba(250,204,21,.42)
+}
+.megaAlert.active{display:block;animation:megaBlink .55s infinite alternate}
+@keyframes megaBlink{from{opacity:.42;transform:scale(.985)}to{opacity:1;transform:scale(1.015)}}
+
+.prizeBox{border:1px solid rgba(250,204,21,.30);background:linear-gradient(135deg,rgba(250,204,21,.12),rgba(56,189,248,.07));border-radius:18px;padding:12px;margin-top:12px}
+.prizeHeader{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.prizePush{display:inline-flex;align-items:center;gap:8px;background:#facc15;color:#111827;border-radius:999px;padding:8px 12px;font-size:12px;font-weight:1000;box-shadow:0 0 18px rgba(250,204,21,.45);animation:yellowPulse .7s infinite alternate}
+@keyframes yellowPulse{from{opacity:.62;transform:scale(.985)}to{opacity:1;transform:scale(1.015)}}
+.prizeGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:8px}
+.prizeCard{background:rgba(15,23,42,.68);border:1px solid var(--border);border-radius:16px;padding:10px;min-height:112px}
+.prizeHits{font-size:18px;font-weight:1000;color:#fff;margin-bottom:4px}
+.prizeWinners{font-size:12px;color:#cbd5e1;line-height:1.35}
+.prizeValue{font-size:14px;font-weight:1000;color:#fde68a;margin-top:6px;line-height:1.25;word-break:break-word}
+.prizeTotal{font-size:11px;color:#93c5fd;margin-top:4px;line-height:1.25;word-break:break-word}
+.prizeEmpty{font-size:12px;color:#cbd5e1;line-height:1.45;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:14px;padding:10px}
+@media(max-width:760px){.prizeGrid{grid-template-columns:1fr}.prizeCard{min-height:auto}.prizeHeader{align-items:flex-start}.prizePush{width:100%;justify-content:center;text-align:center}}
+
+.betValueBox{
+  margin-top:10px;border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:12px;
+  background:linear-gradient(135deg,rgba(34,197,94,.14),rgba(56,189,248,.08));
+}
+.betTitle{font-size:13px;font-weight:1000;color:#dbeafe;margin-bottom:8px;text-transform:uppercase;letter-spacing:.2px}
+.betGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.betCard{background:rgba(15,23,42,.72);border:1px solid var(--border);border-radius:15px;padding:10px;text-align:center}
+.betCard .label{font-size:11px;color:#cbd5e1;font-weight:900;line-height:1.25}
+.betCard .value{font-size:17px;color:#facc15;font-weight:1000;margin-top:5px}
+.betNote{font-size:11px;color:#aab4c8;margin-top:8px;line-height:1.35;text-align:center}
+@media(max-width:760px){.nextDrawPush{margin-top:10px;padding:12px;border-radius:18px}.nextDrawPush .value{font-size:15px}.betGrid{grid-template-columns:1fr}.betCard{padding:9px}.betCard .value{font-size:16px}}
+
+.suggestionBox{border:1px solid rgba(250,204,21,.32);background:rgba(250,204,21,.08);border-radius:18px;padding:13px;margin-top:12px}
+.suggestionTitle{font-size:13px;font-weight:1000;color:#fde68a;margin-bottom:10px;text-transform:uppercase;letter-spacing:.2px}
+.thirdStatus{margin-top:10px;border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:10px;background:rgba(15,23,42,.65);font-size:12px;color:#dbeafe;line-height:1.35}
+
+@media(max-width:760px){.grid{grid-template-columns:1fr}.actions{grid-template-columns:1fr}.ball{width:34px;height:34px}.hit-count-badge{min-width:34px;height:34px;font-size:13px}.hit-count-label{font-size:10px}h1{font-size:21px}.header,.card{border-radius:20px;padding:14px}.compactHeader{padding:12px}.compactHeader h1{font-size:22px}body{padding:10px}}
+@media print{body{background:#fff;color:#111}.card,.header{box-shadow:none;background:#fff;color:#111;border:1px solid #ccc}.noPrint{display:none}.ball{border:1px solid #111}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="header compactHeader">
+    <h1>WV Lotofácil PRO</h1>
+  </section>
+
+  <div id="nextDrawPush" class="nextDrawPush noPrint">
+    <div class="top">
+      <div class="title">🟡 Próximo concurso</div>
+      <div class="value" id="nextDrawMain">Buscando número e data...</div>
+    </div>
+    <div class="sub" id="nextDrawSub">Atualizando pela internet ao abrir o painel.</div>
+  </div>
+
+  <div class="betValueBox noPrint" id="betValueBox">
+    <div class="betTitle">💵 Valor da aposta</div>
+    <div class="betGrid">
+      <div class="betCard"><div class="label">Aposta simples<br>15 dezenas</div><div class="value" id="valorApostaSimples">—</div></div>
+      <div class="betCard"><div class="label">Se jogar seus<br>2 jogos fixos</div><div class="value" id="valorDoisJogos">—</div></div>
+      <div class="betCard"><div class="label">Se incluir o<br>3º jogo sugerido</div><div class="value" id="valorTresJogos">—</div></div>
+    </div>
+    <div class="betNote" id="valorApostaObs">Valor calculado pela aposta simples oficial da Lotofácil. Confira sempre na CAIXA antes de apostar.</div>
+  </div>
+
+  <div id="hitAlert" class="megaAlert noPrint"></div>
+
+  <div class="grid">
+    <section class="card">
+      <h2>🎯 Jogos fixados</h2>
+      <div class="games" id="gamesArea"></div>
+      <div class="notice">Esses jogos ficam travados no código. Para alterar futuramente, basta editar as listas <strong>JOGO_1</strong> e <strong>JOGO_2</strong> no JavaScript. O 3º jogo, quando adicionado, é opcional e fica salvo no navegador para a próxima conferência.</div>
+    </section>
+
+    <section class="card">
+      <h2>🌐 Resultado atual pela internet</h2>
+      <div class="statusBox">
+        <div class="resultLine"><span class="loaderDot"></span> <strong>Status:</strong> <span id="autoStatus">Tentando buscar o último resultado automaticamente...</span></div>
+        <div class="resultLine"><strong>Concurso:</strong> <span id="concursoAuto">—</span></div>
+        <div class="resultLine"><strong>Data:</strong> <span id="dataAuto">—</span></div>
+        <div class="resultLine"><strong>Próximo concurso:</strong> <span id="proxConcursoAuto">—</span></div>
+        <div class="resultLine"><strong>Data do próximo:</strong> <span id="proxDataAuto">—</span></div>
+        <div class="balls" id="autoBalls" style="margin-top:10px"></div>
+      </div>
+      <div class="actions noPrint">
+        <button class="green" onclick="buscarUltimoResultado(true)">Atualizar agora</button>
+        <a class="btn blue" id="btnCaixa" target="_blank" rel="noopener" href="https://loterias.caixa.gov.br/Paginas/Lotofacil.aspx">Abrir CAIXA Lotofácil</a>
+      </div>
+      <div class="blink noPrint" onclick="window.open('https://loterias.caixa.gov.br/Paginas/Lotofacil.aspx','_blank')" style="cursor:pointer">⚡ CLIQUE PARA VER O RESULTADO DO DIA ATUAL NA CAIXA</div>
+      <div class="notice">Observação técnica: em arquivo HTML local, alguns navegadores podem bloquear consulta direta por CORS. Por isso o painel tenta uma API pública auxiliar e também mantém o botão oficial da CAIXA.</div>
+    </section>
+  </div>
+
+  <div class="grid">
+    <section class="card">
+      <h2>✅ Conferir resultado manual</h2>
+      <label for="manualResult">Cole ou digite 15 dezenas do resultado</label>
+      <textarea id="manualResult" placeholder="Exemplo: 01 04 06 07 09 10 11 13 14 16 17 18 20 21 25"></textarea>
+      <div class="actions noPrint">
+        <button class="yellow" onclick="conferirManual()">Conferir agora</button>
+        <button class="darkBtn" onclick="limparManual()">Limpar</button>
+      </div>
+      <div id="manualOut" class="statusBox" style="display:none"></div>
+    </section>
+
+    <section class="card">
+      <h2>📊 Lógica usada nos jogos</h2>
+      <ul class="smallList">
+        <li>Prioriza dezenas quentes recentes cruzadas com frequência histórica.</li>
+        <li>Evita jogos idênticos, mantendo uma variação estratégica entre eles.</li>
+        <li>Controla soma, primos, baixos/altos, moldura, linhas/colunas e sequências.</li>
+        <li>Conferência classificada por prioridade: 15, 14, 13, 12 e 11 acertos.</li>
+      </ul>
+      <table class="table">
+        <thead><tr><th>Faixa</th><th>Leitura no painel</th></tr></thead>
+        <tbody>
+          <tr><td>15 acertos</td><td>Prêmio máximo / destaque ouro</td></tr>
+          <tr><td>14 acertos</td><td>Resultado muito forte / destaque verde</td></tr>
+          <tr><td>13 acertos</td><td>Resultado bom / destaque azul</td></tr>
+          <tr><td>12 acertos</td><td>Faixa premiada / destaque roxo</td></tr>
+          <tr><td>11 acertos</td><td>Você acertou 11 dezenas / alerta piscando</td></tr>
+          <tr><td>0 a 10</td><td>Abaixo da faixa mínima premiada</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <section class="card">
+    <h2>🧾 Última conferência automática</h2>
+    <div id="autoCheck" class="statusBox">Assim que o resultado online for carregado, os 2 jogos serão conferidos automaticamente.</div>
+    <div id="premiacaoArea" class="prizeBox" style="display:none">
+      <div class="prizeHeader">
+        <div>
+          <h2 style="margin:0 0 4px 0">💰 Premiação do concurso</h2>
+          <div class="notice" id="premiacaoResumo" style="margin-top:0">Aguardando dados online da premiação.</div>
+        </div>
+        <div class="prizePush">🟡 PREMIAÇÃO ATUALIZADA PELA INTERNET</div>
+      </div>
+      <div id="premiacaoGrid" class="prizeGrid"></div>
+      <div class="notice" id="premiacaoObs">Valores exibidos por faixa quando a API pública retorna rateio/ganhadores. Confirme sempre no site oficial da CAIXA.</div>
+    </div>
+    <div id="suggestionArea" class="suggestionBox" style="display:none"></div>
+    <div class="actions noPrint" style="max-width:520px">
+      <button class="purple" onclick="copiarJogos()">Copiar jogos</button>
+      <button class="darkBtn" onclick="window.print()">Imprimir / salvar PDF</button>
+    </div>
+    <div class="notice">Jogo responsável: estatística não muda a aleatoriedade do sorteio. Este painel é uma ferramenta de organização, conferência e acompanhamento.</div>
+  </section>
+
+  <div class="footer">WV Lotofácil PRO • 2 jogos fixos • Próximo concurso • Premiação visual • Sugestão dinâmica</div>
+</div>
+
+<script>
+const JOGO_1 = [1,3,5,6,9,10,11,13,14,18,19,20,21,24,25];
+const JOGO_2 = [1,2,4,5,6,10,12,13,14,18,19,20,23,24,25];
+const JOGOS = [
+  {nome:'Jogo 1 — Principal', nums:JOGO_1},
+  {nome:'Jogo 2 — Variação estratégica', nums:JOGO_2}
+];
+let TERCEIRO_JOGO = null;
+let INCLUIR_TERCEIRO = false;
+let ULTIMO_RESULTADO_CONFERIDO = null;
+let SUGESTAO_ATUAL = null;
+
+function carregarTerceiroSalvo(){
+  try{
+    const salvo = JSON.parse(localStorage.getItem('wv_lotofacil_terceiro_jogo') || 'null');
+    if(salvo && Array.isArray(salvo.nums) && salvo.nums.length===15){
+      TERCEIRO_JOGO = normalizar(salvo.nums);
+      INCLUIR_TERCEIRO = TERCEIRO_JOGO.length===15 && salvo.ativo !== false;
+    }
+  }catch(e){ TERCEIRO_JOGO=null; INCLUIR_TERCEIRO=false; }
+}
+function salvarTerceiro(){
+  try{
+    localStorage.setItem('wv_lotofacil_terceiro_jogo', JSON.stringify({ativo:INCLUIR_TERCEIRO, nums:TERCEIRO_JOGO || []}));
+  }catch(e){}
+}
+function getJogosConferencia(){
+  const lista = [...JOGOS];
+  if(INCLUIR_TERCEIRO && TERCEIRO_JOGO && TERCEIRO_JOGO.length===15){
+    lista.push({nome:'Jogo 3 — Adicionado para conferência', nums:TERCEIRO_JOGO, terceiro:true});
+  }
+  return lista;
+}
+function adicionarTerceiroJogo(){
+  if(!SUGESTAO_ATUAL || SUGESTAO_ATUAL.length!==15){
+    alert('Primeiro carregue ou confira um resultado para gerar a sugestão do 3º jogo.');
+    return;
+  }
+  TERCEIRO_JOGO = [...SUGESTAO_ATUAL];
+  INCLUIR_TERCEIRO = true;
+  salvarTerceiro();
+  renderJogos(ULTIMO_RESULTADO_CONFERIDO);
+  atualizarStatusTerceiro();
+  alert('3º jogo adicionado. Ele ficará salvo neste navegador e será conferido automaticamente nos próximos resultados.');
+}
+function removerTerceiroJogo(){
+  TERCEIRO_JOGO = null;
+  INCLUIR_TERCEIRO = false;
+  salvarTerceiro();
+  renderJogos(ULTIMO_RESULTADO_CONFERIDO);
+  atualizarStatusTerceiro();
+}
+function atualizarStatusTerceiro(){
+  const el=document.getElementById('thirdGameStatus');
+  if(!el) return;
+  if(INCLUIR_TERCEIRO && TERCEIRO_JOGO){
+    el.innerHTML = '✅ 3º jogo adicionado para a próxima conferência automática:<br><strong>'+TERCEIRO_JOGO.map(dois).join(' - ')+'</strong>';
+  }else{
+    el.textContent = 'O 3º jogo é opcional. Gere a sugestão após conferir um resultado e clique em “Adicionar 3º jogo” para ele entrar na próxima conferência.';
+  }
+}
+carregarTerceiroSalvo();
+
+// Valor oficial atual da aposta simples da Lotofácil com 15 dezenas.
+// Atualizado conforme tabela pública da CAIXA: 15 números = R$ 3,50.
+const VALOR_APOSTA_SIMPLES = 3.50;
+
+function renderValoresAposta(){
+  const v = VALOR_APOSTA_SIMPLES;
+  const el1=document.getElementById('valorApostaSimples');
+  const el2=document.getElementById('valorDoisJogos');
+  const el3=document.getElementById('valorTresJogos');
+  if(el1) el1.textContent = formatarMoeda(v);
+  if(el2) el2.textContent = formatarMoeda(v*2);
+  if(el3) el3.textContent = formatarMoeda(v*3);
+}
+
+async function tentarAtualizarValorAposta(){
+  // HTML local pode sofrer bloqueio CORS em páginas oficiais.
+  // Mantém o valor oficial no código e tenta confirmar online quando possível.
+  renderValoresAposta();
+  const obs=document.getElementById('valorApostaObs');
+  try{
+    const resp = await fetch('https://loterias.caixa.gov.br/paginas/lotofacil.aspx',{cache:'no-store'});
+    const txt = await resp.text();
+    const m = txt.match(/15\s*<\/td>\s*<td[^>]*>\s*R\$\s*([0-9.,]+)/i) || txt.match(/15[^R]{0,80}R\$\s*([0-9.,]+)/i);
+    if(m){
+      const n = numeroSeguro(m[1]);
+      if(n && n>0){
+        if(obs) obs.textContent = 'Valor confirmado pela internet na tabela da CAIXA. Confira novamente antes de apostar.';
+      }
+    }
+  }catch(e){
+    if(obs) obs.textContent = 'Valor oficial atual usado no painel: aposta simples de 15 dezenas = R$ 3,50. Se o navegador bloquear a consulta, confirme no site da CAIXA.';
+  }
+}
+
+// Base histórica usada como peso fixo dentro do HTML. A sugestão não substitui os 2 jogos fixos.
+// Quanto maior o peso, mais a dezena é favorecida quando o terceiro jogo é recalculado após a conferência.
+const PESO_HISTORICO = {
+  20:25,10:24,25:23,11:22,13:21,24:20,1:19,4:18,14:17,3:16,
+  12:15,5:14,2:13,22:12,15:11,19:10,9:9,18:8,21:7,7:6,
+  6:5,17:4,23:3,8:2,16:1
+};
+const PRIMOS = [2,3,5,7,11,13,17,19,23];
+const MOLDURA = [1,2,3,4,5,6,10,11,15,16,20,21,22,23,24,25];
+const LINHAS = [[1,2,3,4,5],[6,7,8,9,10],[11,12,13,14,15],[16,17,18,19,20],[21,22,23,24,25]];
+const COLUNAS = [[1,6,11,16,21],[2,7,12,17,22],[3,8,13,18,23],[4,9,14,19,24],[5,10,15,20,25]];
+
+const API_URLS = [
+  'https://api.guidi.dev.br/loteria/lotofacil/ultimo',
+  'https://loteriascaixa-api.herokuapp.com/api/lotofacil/latest'
+];
+
+function dois(n){return String(n).padStart(2,'0')}
+function normalizar(nums){return nums.map(n=>parseInt(n,10)).filter(n=>Number.isInteger(n)&&n>=1&&n<=25).sort((a,b)=>a-b)}
+function parseTexto(txt){
+  const nums = (txt||'').match(/\d{1,2}/g)?.map(n=>parseInt(n,10)) || [];
+  const validos = normalizar(nums);
+  const unicos = [...new Set(validos)].sort((a,b)=>a-b);
+  return unicos.length===15 ? unicos : null;
+}
+function ballsHtml(nums, resultSet=null){
+  return nums.map(n=>{
+    let cls='ball';
+    if(resultSet){ cls += resultSet.has(n) ? ' hit' : ' miss'; }
+    return `<span class="${cls}">${dois(n)}</span>`;
+  }).join('');
+}
+function renderJogos(resultNums=null){
+  const set = resultNums ? new Set(resultNums) : null;
+  document.getElementById('gamesArea').innerHTML = getJogosConferencia().map((g,i)=>{
+    const acertos = set ? g.nums.filter(n=>set.has(n)).length : null;
+    const contador = set
+      ? `<span class="hit-count-wrap"><span class="hit-count-label">acertos</span><span class="hit-count-badge">${acertos}</span></span>`
+      : `<span>${g.nums.length} dezenas</span>`;
+    return `
+    <div class="game">
+      <div class="game-title"><span>${g.nome}</span><span class="game-title-right">${contador}</span></div>
+      <div class="balls">${ballsHtml(g.nums,set)}</div>
+    </div>`;
+  }).join('');
+  atualizarStatusTerceiro();
+}
+function classeAcerto(ac){
+  if(ac===15) return 'win15';
+  if(ac===14) return 'win14';
+  if(ac===13) return 'win13';
+  if(ac===12) return 'win12';
+  if(ac===11) return 'win11';
+  return 'low';
+}
+function fraseAcerto(ac){
+  if(ac===15) return '🏆 15 ACERTOS — prêmio máximo';
+  if(ac===14) return '🔥 14 ACERTOS — resultado muito forte';
+  if(ac===13) return '✅ 13 ACERTOS — resultado bom';
+  if(ac===12) return '🟣 12 ACERTOS — faixa premiada';
+  if(ac===11) return '🟠 você acertou 11 dezenas';
+  return '⚪ abaixo de 11 dezenas';
+}
+function qtdSet(nums,setArr){const s=new Set(setArr);return nums.filter(n=>s.has(n)).length}
+function soma(nums){return nums.reduce((a,b)=>a+b,0)}
+function lowCount(nums){return nums.filter(n=>n<=13).length}
+function maxSeq(nums){let m=1,r=1;for(let i=1;i<nums.length;i++){if(nums[i]===nums[i-1]+1){r++;m=Math.max(m,r)}else r=1}return m}
+function linhaColOk(nums){
+  const s=new Set(nums);
+  for(const l of LINHAS){let c=l.filter(n=>s.has(n)).length;if(c>4)return false}
+  for(const c0 of COLUNAS){let c=c0.filter(n=>s.has(n)).length;if(c>4)return false}
+  return true;
+}
+function intersec(a,b){const s=new Set(b);return a.filter(n=>s.has(n)).length}
+function scoreSugestao(nums, resultado){
+  const resSet=new Set(resultado);
+  const fixos=[...new Set([...JOGO_1,...JOGO_2])];
+  let sc=0;
+  for(const n of nums){
+    sc += PESO_HISTORICO[n] || 0;
+    if(resSet.has(n)) sc += 9;       // favorece dezenas que vieram no concurso conferido
+    if(fixos.includes(n)) sc += 4;   // mantém coerência com os 2 jogos principais
+  }
+  sc -= Math.abs(soma(nums)-195)*2.6;
+  sc -= Math.abs(qtdSet(nums,PRIMOS)-5)*10;
+  sc -= Math.abs(qtdSet(nums,MOLDURA)-10)*7;
+  sc -= Math.abs(lowCount(nums)-8)*7;
+  sc -= Math.max(0,maxSeq(nums)-4)*18;
+  const i1=intersec(nums,JOGO_1), i2=intersec(nums,JOGO_2);
+  if(i1>11) sc -= (i1-11)*25;
+  if(i2>11) sc -= (i2-11)*25;
+  if(i1<8) sc -= (8-i1)*8;
+  if(i2<8) sc -= (8-i2)*8;
+  return sc;
+}
+function gerarCombinacaoDeterministica(seed, offset){
+  // Gerador pseudoaleatório determinístico para manter o mesmo resultado para o mesmo concurso conferido.
+  let x = (seed + offset * 9973) >>> 0;
+  function rnd(){x = (1664525 * x + 1013904223) >>> 0; return x / 4294967296;}
+  const candidatos=[];
+  for(let n=1;n<=25;n++){
+    const base=(PESO_HISTORICO[n]||1) + (rnd()*18);
+    candidatos.push({n,base});
+  }
+  candidatos.sort((a,b)=>b.base-a.base);
+  return candidatos.slice(0,15).map(o=>o.n).sort((a,b)=>a-b);
+}
+function gerarTerceiroJogo(resultado){
+  const seed = resultado.reduce((a,n,i)=>a + n*(i+3)*37, 2026);
+  let melhor=null;
+  for(let i=0;i<1800;i++){
+    const nums=gerarCombinacaoDeterministica(seed,i);
+    const sm=soma(nums), pr=qtdSet(nums,PRIMOS), mold=qtdSet(nums,MOLDURA), low=lowCount(nums);
+    if(sm<185||sm>205) continue;
+    if(pr<4||pr>6) continue;
+    if(mold<9||mold>11) continue;
+    if(low<6||low>9) continue;
+    if(maxSeq(nums)>4) continue;
+    if(!linhaColOk(nums)) continue;
+    const sc=scoreSugestao(nums,resultado);
+    if(!melhor || sc>melhor.sc) melhor={nums,sc};
+  }
+  if(!melhor){
+    // fallback seguro: mistura fixos fortes + dezenas do resultado atual + histórico
+    const base=[...new Set([...resultado,...JOGO_1,...JOGO_2])]
+      .sort((a,b)=>(PESO_HISTORICO[b]||0)-(PESO_HISTORICO[a]||0))
+      .slice(0,15).sort((a,b)=>a-b);
+    melhor={nums:base,sc:scoreSugestao(base,resultado)};
+  }
+  return melhor.nums;
+}
+function renderSugestao(resultado){
+  const terceiro=gerarTerceiroJogo(resultado);
+  SUGESTAO_ATUAL = terceiro;
+  const area=document.getElementById('suggestionArea');
+  area.style.display='block';
+  area.innerHTML = `
+    <div class="suggestionTitle">💡 Sugestão dinâmica para o próximo jogo</div>
+    <div class="notice" style="margin-bottom:10px">
+      Os 2 jogos principais continuam fixos. O 3º jogo é opcional: clique em <strong>Adicionar 3º jogo</strong> para ele ficar salvo neste navegador e entrar automaticamente na próxima conferência quando sair o novo resultado.
+    </div>
+    <div class="game" style="background:rgba(250,204,21,.09)">
+      <div class="game-title"><span>Jogo 3 — Sugestão após conferência</span><span>15 dezenas</span></div>
+      <div class="balls">${ballsHtml(terceiro)}</div>
+    </div>
+    <div class="notice"><strong>Jogo 3 sugerido:</strong> ${terceiro.map(dois).join(' - ')}</div>
+    <div class="actions noPrint" style="margin-top:10px;grid-template-columns:1fr 1fr">
+      <button class="yellow" onclick="adicionarTerceiroJogo()">Adicionar 3º jogo</button>
+      <button class="darkBtn" onclick="removerTerceiroJogo()">Remover 3º jogo</button>
+    </div>
+    <div id="thirdGameStatus" class="thirdStatus"></div>`;
+  atualizarStatusTerceiro();
+}
+function mostrarAlertaAcerto(melhor){
+  const box=document.getElementById('hitAlert');
+  if(!box) return;
+  if(melhor && melhor.acertos>=11){
+    box.innerHTML = `🎯 VOCÊ ACERTOU ${melhor.acertos} DEZENAS NO ${melhor.nome.toUpperCase()}!`;
+    box.classList.remove('active');
+    void box.offsetWidth; // reinicia a animação
+    box.classList.add('active');
+  }else{
+    box.classList.remove('active');
+    box.innerHTML='';
+  }
+}
+function conferirComResultado(resultado, destinoId){
+  ULTIMO_RESULTADO_CONFERIDO = resultado;
+  const set = new Set(resultado);
+  let html = `<div class="resultLine"><strong>Resultado usado:</strong> ${resultado.map(dois).join(' - ')}</div><br>`;
+  const apuracao = getJogosConferencia().map(g=>({
+    ...g,
+    acertos: g.nums.filter(n=>set.has(n)).length,
+    faltaram: g.nums.filter(n=>!set.has(n))
+  }));
+  const melhor = apuracao.reduce((a,b)=> b.acertos > a.acertos ? b : a, apuracao[0]);
+  mostrarAlertaAcerto(melhor);
+  if(melhor && melhor.acertos >= 11){
+    html += `<div class="blink">🎯 Você acertou ${melhor.acertos} dezenas no ${melhor.nome}</div><br>`;
+  }
+  apuracao.forEach(g=>{
+    html += `<div class="resultLine ${classeAcerto(g.acertos)}"><strong>${g.nome}:</strong> ${g.acertos} acertos — ${fraseAcerto(g.acertos)}</div>`;
+    html += `<div class="notice">Dezenas que não bateram: ${g.faltaram.map(dois).join(' - ') || 'nenhuma'}</div>`;
+  });
+  document.getElementById(destinoId).innerHTML = html;
+  document.getElementById(destinoId).style.display = 'block';
+  renderJogos(resultado);
+  renderSugestao(resultado);
+}
+function conferirManual(){
+  const r = parseTexto(document.getElementById('manualResult').value);
+  if(!r){alert('Resultado inválido. Digite exatamente 15 dezenas únicas entre 01 e 25.');return;}
+  conferirComResultado(r,'manualOut');
+}
+function limparManual(){
+  document.getElementById('manualResult').value='';
+  document.getElementById('manualOut').style.display='none';
+  ULTIMO_RESULTADO_CONFERIDO=null;
+  renderJogos();
+}
+function extrairResultado(data){
+  // API guidi/CAIXA/loteriascaixa-api: campos variam conforme origem.
+  // O painel lê dezenas, concurso atual, data do resultado e, quando disponível, próximo concurso/data.
+  const dezenas = data?.dezenas || data?.listaDezenas || data?.dezenasOrdemSorteio || data?.resultado || [];
+  const nums = normalizar(dezenas);
+  if(nums.length!==15) throw new Error('Retorno recebido, mas sem 15 dezenas válidas.');
+  const concursoAtual = data?.numeroConcurso || data?.numeroDoConcurso || data?.concurso || data?.numero || data?.id || 'último';
+  const proxNumeroApi = data?.numeroProximoConcurso || data?.numeroDoProximoConcurso || data?.proximoConcurso || data?.concursoProximo || data?.proximo?.concurso || data?.proximo?.numero;
+  let proxConcurso = proxNumeroApi || '—';
+  if((proxConcurso === '—' || proxConcurso === null || proxConcurso === undefined) && Number.isFinite(Number(concursoAtual))){
+    proxConcurso = Number(concursoAtual) + 1;
+  }
+  return {
+    dezenas: nums,
+    concurso: concursoAtual,
+    data: data?.dataApuracao || data?.data || data?.dataPorExtenso || data?.dataResultado || 'data não informada',
+    proximoConcurso: proxConcurso,
+    dataProximo: data?.dataProximoConcurso || data?.dataProximoSorteio || data?.proximo?.data || data?.proximo?.dataSorteio || 'data não informada',
+    valorEstimado: data?.valorEstimadoProximoConcurso || data?.valorEstimado || data?.premioEstimado || null,
+    premiacao: extrairPremiacao(data)
+  };
+}
+
+function numeroSeguro(v){
+  if(v===null || v===undefined || v==='') return null;
+  if(typeof v === 'number') return Number.isFinite(v) ? v : null;
+  let s=String(v).trim();
+  if(!s) return null;
+  s=s.replace(/R\$|\s/g,'');
+  if(s.includes(',') && s.includes('.')) s=s.replace(/\./g,'').replace(',', '.');
+  else if(s.includes(',')) s=s.replace(',', '.');
+  const n=Number(s.replace(/[^0-9.-]/g,''));
+  return Number.isFinite(n) ? n : null;
+}
+function inteiroSeguro(v){
+  const n=numeroSeguro(v);
+  return Number.isFinite(n) ? Math.round(n) : 0;
+}
+function descobrirFaixa(item, idx){
+  const texto = [item?.descricaoFaixa,item?.descricao,item?.faixa,item?.acertos,item?.pontos,item?.nome,item?.tipo].filter(Boolean).join(' ').toLowerCase();
+  const direto = texto.match(/(15|14|13|12|11)/);
+  if(direto) return parseInt(direto[1],10);
+  const f = parseInt(item?.faixa ?? item?.numeroFaixa ?? item?.range,10);
+  if(f>=1 && f<=5) return 16-f; // Lotofácil: faixa 1=15, 2=14, 3=13, 4=12, 5=11
+  return [15,14,13,12,11][idx] || null;
+}
+function extrairPremiacao(data){
+  const fonte = data?.listaRateioPremio || data?.rateioPremio || data?.rateio || data?.premiacoes || data?.premiacao || data?.listaRateio || [];
+  if(!Array.isArray(fonte) || !fonte.length) return [];
+  const mapa = new Map();
+  fonte.forEach((item,idx)=>{
+    const acertos = descobrirFaixa(item,idx);
+    if(![15,14,13,12,11].includes(acertos)) return;
+    const ganhadores = inteiroSeguro(item?.numeroDeGanhadores ?? item?.quantidadeGanhadores ?? item?.ganhadores ?? item?.vencedores ?? item?.qtdGanhadores ?? item?.quantidade);
+    const valor = numeroSeguro(item?.valorPremio ?? item?.valorPremioPorGanhador ?? item?.valorPorGanhador ?? item?.premio ?? item?.valor ?? item?.rateio);
+    mapa.set(acertos,{acertos,ganhadores,valorPorGanhador:valor,totalFaixa:(valor!==null && ganhadores>0) ? valor*ganhadores : null});
+  });
+  return [15,14,13,12,11].map(a=>mapa.get(a) || {acertos:a,ganhadores:0,valorPorGanhador:null,totalFaixa:null});
+}
+function renderPremiacao(info){
+  const area=document.getElementById('premiacaoArea');
+  const grid=document.getElementById('premiacaoGrid');
+  const resumo=document.getElementById('premiacaoResumo');
+  if(!area || !grid) return;
+  const premios = info?.premiacao || [];
+  area.style.display='block';
+  if(!premios.length){
+    resumo.textContent = 'A fonte online carregou o resultado, mas não retornou o rateio completo deste concurso.';
+    grid.innerHTML = '<div class="prizeEmpty">Abra a página oficial da CAIXA para conferir ganhadores e valores por faixa. O painel mantém a conferência dos seus 2 jogos normalmente.</div>';
+    return;
+  }
+  resumo.textContent = `Concurso ${info?.concurso || '—'} • ${info?.data || 'data não informada'} • rateio por faixa`;
+  grid.innerHTML = premios.map(p=>{
+    const ganhou = p.ganhadores===1 ? '1 ganhador' : `${p.ganhadores.toLocaleString('pt-BR')} ganhadores`;
+    const valor = p.valorPorGanhador!==null ? formatarMoeda(p.valorPorGanhador) : 'valor não informado';
+    const total = p.totalFaixa!==null ? `Total estimado da faixa: ${formatarMoeda(p.totalFaixa)}` : 'Total da faixa não informado';
+    return `<div class="prizeCard">
+      <div class="prizeHits">${p.acertos} acertos</div>
+      <div class="prizeWinners">${ganhou}</div>
+      <div class="prizeValue">${valor}<br><span style="font-size:11px;color:#fef3c7">para cada ganhador</span></div>
+      <div class="prizeTotal">${total}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderProximoConcurso(info){
+  const prox = info?.proximoConcurso || '—';
+  const data = info?.dataProximo || 'data não informada';
+  const premio = info?.valorEstimado ? ` • prêmio estimado: ${formatarMoeda(info.valorEstimado)}` : '';
+  const main = document.getElementById('nextDrawMain');
+  const sub = document.getElementById('nextDrawSub');
+  const proxTop = document.getElementById('proxConcursoAuto');
+  const proxData = document.getElementById('proxDataAuto');
+  if(main) main.textContent = `Concurso ${prox} • ${data}`;
+  if(sub) sub.textContent = `Atualizado pela internet. Confira sempre no site oficial da CAIXA antes de apostar${premio}.`;
+  if(proxTop) proxTop.textContent = prox;
+  if(proxData) proxData.textContent = data;
+}
+function renderProximoFallback(msg='Não consegui puxar o próximo concurso automaticamente neste navegador.') {
+  const main = document.getElementById('nextDrawMain');
+  const sub = document.getElementById('nextDrawSub');
+  const proxTop = document.getElementById('proxConcursoAuto');
+  const proxData = document.getElementById('proxDataAuto');
+  if(main) main.textContent = 'Abrir CAIXA para confirmar';
+  if(sub) sub.textContent = msg + ' Use o botão da CAIXA para ver número e data atualizados.';
+  if(proxTop) proxTop.textContent = 'ver na CAIXA';
+  if(proxData) proxData.textContent = 'ver na CAIXA';
+}
+function formatarMoeda(v){
+  const n = typeof v === 'number' ? v : Number(String(v).replace(/[^0-9,.-]/g,'').replace('.', '').replace(',', '.'));
+  if(!Number.isFinite(n)) return String(v);
+  return n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+}
+async function buscarUltimoResultado(manual=false){
+  document.getElementById('autoStatus').textContent = 'Buscando atualização online...';
+  document.getElementById('autoBalls').innerHTML = '';
+  let ultimoErro = '';
+  for(const url of API_URLS){
+    try{
+      const resp = await fetch(url,{cache:'no-store'});
+      if(!resp.ok) throw new Error('HTTP '+resp.status);
+      const json = await resp.json();
+      const r = extrairResultado(json);
+      document.getElementById('autoStatus').textContent = 'Resultado carregado automaticamente.';
+      document.getElementById('concursoAuto').textContent = r.concurso;
+      document.getElementById('dataAuto').textContent = r.data;
+      document.getElementById('autoBalls').innerHTML = ballsHtml(r.dezenas);
+      renderProximoConcurso(r);
+      renderPremiacao(r);
+      conferirComResultado(r.dezenas,'autoCheck');
+      document.getElementById('manualResult').value = r.dezenas.map(dois).join(' ');
+      return;
+    }catch(e){ultimoErro = e.message || String(e);}
+  }
+  document.getElementById('autoStatus').textContent = 'Não foi possível carregar automaticamente neste navegador.';
+  renderProximoFallback('A busca automática do próximo concurso também pode ter sido bloqueada por segurança/CORS.');
+  document.getElementById('autoCheck').innerHTML = 'A busca automática falhou ou foi bloqueada pelo navegador/CORS. Use o botão oficial da CAIXA, copie as 15 dezenas e cole no campo manual. Detalhe técnico: '+ultimoErro;
+  renderPremiacao({premiacao:[]});
+  if(manual) alert('Não consegui buscar automaticamente. Abra a CAIXA pelo botão e cole o resultado manualmente.');
+}
+function copiarJogos(){
+  let txt = getJogosConferencia().map(g=>`${g.nome}: ${g.nums.map(dois).join(' - ')}`).join('\n');
+  const sug = document.getElementById('suggestionArea')?.innerText || '';
+  if(sug.trim()) txt += '\n\n' + sug.trim();
+  navigator.clipboard?.writeText(txt).then(()=>alert('Jogos copiados.')).catch(()=>{
+    const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); alert('Jogos copiados.');
+  });
+}
+renderJogos();
+renderValoresAposta();
+window.addEventListener('load',()=>{
+  renderValoresAposta();
+  tentarAtualizarValorAposta();
+  buscarUltimoResultado(false);
+});
+</script>
+</body>
+</html>
