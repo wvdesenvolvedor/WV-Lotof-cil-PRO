@@ -149,21 +149,6 @@ button,a.btn{
 .prizeEmpty{font-size:12px;color:#cbd5e1;line-height:1.45;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:14px;padding:10px}
 @media(max-width:760px){.prizeGrid{grid-template-columns:1fr}.prizeCard{min-height:auto}.prizeHeader{align-items:flex-start}.prizePush{width:100%;justify-content:center;text-align:center}}
 
-.betValueBox{
-  margin-top:10px;border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:12px;
-  background:linear-gradient(135deg,rgba(34,197,94,.14),rgba(56,189,248,.08));
-}
-.betTitle{font-size:13px;font-weight:1000;color:#dbeafe;margin-bottom:8px;text-transform:uppercase;letter-spacing:.2px}
-.betGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.betCard{background:rgba(15,23,42,.72);border:1px solid var(--border);border-radius:15px;padding:10px;text-align:center}
-.betCard .label{font-size:11px;color:#cbd5e1;font-weight:900;line-height:1.25}
-.betCard .value{font-size:17px;color:#facc15;font-weight:1000;margin-top:5px}
-.betNote{font-size:11px;color:#aab4c8;margin-top:8px;line-height:1.35;text-align:center}
-@media(max-width:760px){.nextDrawPush{margin-top:10px;padding:12px;border-radius:18px}.nextDrawPush .value{font-size:15px}.betGrid{grid-template-columns:1fr}.betCard{padding:9px}.betCard .value{font-size:16px}}
-
-.suggestionBox{border:1px solid rgba(250,204,21,.32);background:rgba(250,204,21,.08);border-radius:18px;padding:13px;margin-top:12px}
-.suggestionTitle{font-size:13px;font-weight:1000;color:#fde68a;margin-bottom:10px;text-transform:uppercase;letter-spacing:.2px}
-.thirdStatus{margin-top:10px;border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:10px;background:rgba(15,23,42,.65);font-size:12px;color:#dbeafe;line-height:1.35}
 
 @media(max-width:760px){.grid{grid-template-columns:1fr}.actions{grid-template-columns:1fr}.ball{width:34px;height:34px}.hit-count-badge{min-width:34px;height:34px;font-size:13px}.hit-count-label{font-size:10px}h1{font-size:21px}.header,.card{border-radius:20px;padding:14px}.compactHeader{padding:12px}.compactHeader h1{font-size:22px}body{padding:10px}}
 @media print{body{background:#fff;color:#111}.card,.header{box-shadow:none;background:#fff;color:#111;border:1px solid #ccc}.noPrint{display:none}.ball{border:1px solid #111}}
@@ -183,23 +168,13 @@ button,a.btn{
     <div class="sub" id="nextDrawSub">Atualizando pela internet ao abrir o painel.</div>
   </div>
 
-  <div class="betValueBox noPrint" id="betValueBox">
-    <div class="betTitle">💵 Valor da aposta</div>
-    <div class="betGrid">
-      <div class="betCard"><div class="label">Aposta simples<br>15 dezenas</div><div class="value" id="valorApostaSimples">—</div></div>
-      <div class="betCard"><div class="label">Se jogar seus<br>2 jogos fixos</div><div class="value" id="valorDoisJogos">—</div></div>
-      <div class="betCard"><div class="label">Se incluir o<br>3º jogo sugerido</div><div class="value" id="valorTresJogos">—</div></div>
-    </div>
-    <div class="betNote" id="valorApostaObs">Valor calculado pela aposta simples oficial da Lotofácil. Confira sempre na CAIXA antes de apostar.</div>
-  </div>
-
   <div id="hitAlert" class="megaAlert noPrint"></div>
 
   <div class="grid">
     <section class="card">
       <h2>🎯 Jogos fixados</h2>
       <div class="games" id="gamesArea"></div>
-      <div class="notice">Esses jogos ficam travados no código. Para alterar futuramente, basta editar as listas <strong>JOGO_1</strong> e <strong>JOGO_2</strong> no JavaScript. O 3º jogo, quando adicionado, é opcional e fica salvo no navegador para a próxima conferência.</div>
+      <div class="notice">Esses jogos ficam travados no código. Para alterar futuramente, basta editar as listas <strong>JOGO_1</strong> e <strong>JOGO_2</strong> no JavaScript.</div>
     </section>
 
     <section class="card">
@@ -269,7 +244,6 @@ button,a.btn{
       <div id="premiacaoGrid" class="prizeGrid"></div>
       <div class="notice" id="premiacaoObs">Valores exibidos por faixa quando a API pública retorna rateio/ganhadores. Confirme sempre no site oficial da CAIXA.</div>
     </div>
-    <div id="suggestionArea" class="suggestionBox" style="display:none"></div>
     <div class="actions noPrint" style="max-width:520px">
       <button class="purple" onclick="copiarJogos()">Copiar jogos</button>
       <button class="darkBtn" onclick="window.print()">Imprimir / salvar PDF</button>
@@ -277,7 +251,7 @@ button,a.btn{
     <div class="notice">Jogo responsável: estatística não muda a aleatoriedade do sorteio. Este painel é uma ferramenta de organização, conferência e acompanhamento.</div>
   </section>
 
-  <div class="footer">WV Lotofácil PRO • 2 jogos fixos • Próximo concurso • Premiação visual • Sugestão dinâmica</div>
+  <div class="footer">WV Lotofácil PRO • 2 jogos fixos • Próximo concurso • Premiação visual</div>
 </div>
 
 <script>
@@ -287,98 +261,13 @@ const JOGOS = [
   {nome:'Jogo 1 — Principal', nums:JOGO_1},
   {nome:'Jogo 2 — Variação estratégica', nums:JOGO_2}
 ];
-let TERCEIRO_JOGO = null;
-let INCLUIR_TERCEIRO = false;
 let ULTIMO_RESULTADO_CONFERIDO = null;
-let SUGESTAO_ATUAL = null;
 
-function carregarTerceiroSalvo(){
-  try{
-    const salvo = JSON.parse(localStorage.getItem('wv_lotofacil_terceiro_jogo') || 'null');
-    if(salvo && Array.isArray(salvo.nums) && salvo.nums.length===15){
-      TERCEIRO_JOGO = normalizar(salvo.nums);
-      INCLUIR_TERCEIRO = TERCEIRO_JOGO.length===15 && salvo.ativo !== false;
-    }
-  }catch(e){ TERCEIRO_JOGO=null; INCLUIR_TERCEIRO=false; }
-}
-function salvarTerceiro(){
-  try{
-    localStorage.setItem('wv_lotofacil_terceiro_jogo', JSON.stringify({ativo:INCLUIR_TERCEIRO, nums:TERCEIRO_JOGO || []}));
-  }catch(e){}
-}
 function getJogosConferencia(){
-  const lista = [...JOGOS];
-  if(INCLUIR_TERCEIRO && TERCEIRO_JOGO && TERCEIRO_JOGO.length===15){
-    lista.push({nome:'Jogo 3 — Adicionado para conferência', nums:TERCEIRO_JOGO, terceiro:true});
-  }
-  return lista;
-}
-function adicionarTerceiroJogo(){
-  if(!SUGESTAO_ATUAL || SUGESTAO_ATUAL.length!==15){
-    alert('Primeiro carregue ou confira um resultado para gerar a sugestão do 3º jogo.');
-    return;
-  }
-  TERCEIRO_JOGO = [...SUGESTAO_ATUAL];
-  INCLUIR_TERCEIRO = true;
-  salvarTerceiro();
-  renderJogos(ULTIMO_RESULTADO_CONFERIDO);
-  atualizarStatusTerceiro();
-  alert('3º jogo adicionado. Ele ficará salvo neste navegador e será conferido automaticamente nos próximos resultados.');
-}
-function removerTerceiroJogo(){
-  TERCEIRO_JOGO = null;
-  INCLUIR_TERCEIRO = false;
-  salvarTerceiro();
-  renderJogos(ULTIMO_RESULTADO_CONFERIDO);
-  atualizarStatusTerceiro();
-}
-function atualizarStatusTerceiro(){
-  const el=document.getElementById('thirdGameStatus');
-  if(!el) return;
-  if(INCLUIR_TERCEIRO && TERCEIRO_JOGO){
-    el.innerHTML = '✅ 3º jogo adicionado para a próxima conferência automática:<br><strong>'+TERCEIRO_JOGO.map(dois).join(' - ')+'</strong>';
-  }else{
-    el.textContent = 'O 3º jogo é opcional. Gere a sugestão após conferir um resultado e clique em “Adicionar 3º jogo” para ele entrar na próxima conferência.';
-  }
-}
-carregarTerceiroSalvo();
-
-// Valor oficial atual da aposta simples da Lotofácil com 15 dezenas.
-// Atualizado conforme tabela pública da CAIXA: 15 números = R$ 3,50.
-const VALOR_APOSTA_SIMPLES = 3.50;
-
-function renderValoresAposta(){
-  const v = VALOR_APOSTA_SIMPLES;
-  const el1=document.getElementById('valorApostaSimples');
-  const el2=document.getElementById('valorDoisJogos');
-  const el3=document.getElementById('valorTresJogos');
-  if(el1) el1.textContent = formatarMoeda(v);
-  if(el2) el2.textContent = formatarMoeda(v*2);
-  if(el3) el3.textContent = formatarMoeda(v*3);
+  return [...JOGOS];
 }
 
-async function tentarAtualizarValorAposta(){
-  // HTML local pode sofrer bloqueio CORS em páginas oficiais.
-  // Mantém o valor oficial no código e tenta confirmar online quando possível.
-  renderValoresAposta();
-  const obs=document.getElementById('valorApostaObs');
-  try{
-    const resp = await fetch('https://loterias.caixa.gov.br/paginas/lotofacil.aspx',{cache:'no-store'});
-    const txt = await resp.text();
-    const m = txt.match(/15\s*<\/td>\s*<td[^>]*>\s*R\$\s*([0-9.,]+)/i) || txt.match(/15[^R]{0,80}R\$\s*([0-9.,]+)/i);
-    if(m){
-      const n = numeroSeguro(m[1]);
-      if(n && n>0){
-        if(obs) obs.textContent = 'Valor confirmado pela internet na tabela da CAIXA. Confira novamente antes de apostar.';
-      }
-    }
-  }catch(e){
-    if(obs) obs.textContent = 'Valor oficial atual usado no painel: aposta simples de 15 dezenas = R$ 3,50. Se o navegador bloquear a consulta, confirme no site da CAIXA.';
-  }
-}
-
-// Base histórica usada como peso fixo dentro do HTML. A sugestão não substitui os 2 jogos fixos.
-// Quanto maior o peso, mais a dezena é favorecida quando o terceiro jogo é recalculado após a conferência.
+// Base histórica mantida no HTML para preservar a lógica estatística original do painel.
 const PESO_HISTORICO = {
   20:25,10:24,25:23,11:22,13:21,24:20,1:19,4:18,14:17,3:16,
   12:15,5:14,2:13,22:12,15:11,19:10,9:9,18:8,21:7,7:6,
@@ -422,8 +311,7 @@ function renderJogos(resultNums=null){
       <div class="balls">${ballsHtml(g.nums,set)}</div>
     </div>`;
   }).join('');
-  atualizarStatusTerceiro();
-}
+ }
 function classeAcerto(ac){
   if(ac===15) return 'win15';
   if(ac===14) return 'win14';
@@ -509,26 +397,7 @@ function gerarTerceiroJogo(resultado){
   return melhor.nums;
 }
 function renderSugestao(resultado){
-  const terceiro=gerarTerceiroJogo(resultado);
-  SUGESTAO_ATUAL = terceiro;
-  const area=document.getElementById('suggestionArea');
-  area.style.display='block';
-  area.innerHTML = `
-    <div class="suggestionTitle">💡 Sugestão dinâmica para o próximo jogo</div>
-    <div class="notice" style="margin-bottom:10px">
-      Os 2 jogos principais continuam fixos. O 3º jogo é opcional: clique em <strong>Adicionar 3º jogo</strong> para ele ficar salvo neste navegador e entrar automaticamente na próxima conferência quando sair o novo resultado.
-    </div>
-    <div class="game" style="background:rgba(250,204,21,.09)">
-      <div class="game-title"><span>Jogo 3 — Sugestão após conferência</span><span>15 dezenas</span></div>
-      <div class="balls">${ballsHtml(terceiro)}</div>
-    </div>
-    <div class="notice"><strong>Jogo 3 sugerido:</strong> ${terceiro.map(dois).join(' - ')}</div>
-    <div class="actions noPrint" style="margin-top:10px;grid-template-columns:1fr 1fr">
-      <button class="yellow" onclick="adicionarTerceiroJogo()">Adicionar 3º jogo</button>
-      <button class="darkBtn" onclick="removerTerceiroJogo()">Remover 3º jogo</button>
-    </div>
-    <div id="thirdGameStatus" class="thirdStatus"></div>`;
-  atualizarStatusTerceiro();
+  // Sugestão de 3º jogo removida. Mantém apenas os 2 jogos fixos.
 }
 function mostrarAlertaAcerto(melhor){
   const box=document.getElementById('hitAlert');
@@ -719,17 +588,12 @@ async function buscarUltimoResultado(manual=false){
 }
 function copiarJogos(){
   let txt = getJogosConferencia().map(g=>`${g.nome}: ${g.nums.map(dois).join(' - ')}`).join('\n');
-  const sug = document.getElementById('suggestionArea')?.innerText || '';
-  if(sug.trim()) txt += '\n\n' + sug.trim();
   navigator.clipboard?.writeText(txt).then(()=>alert('Jogos copiados.')).catch(()=>{
     const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); alert('Jogos copiados.');
   });
 }
 renderJogos();
-renderValoresAposta();
 window.addEventListener('load',()=>{
-  renderValoresAposta();
-  tentarAtualizarValorAposta();
   buscarUltimoResultado(false);
 });
 </script>
